@@ -89,7 +89,11 @@ function drawScene() {
         y: yScale(50),
         dy: 50,
         dx: 50
-    }]
+    }];
+    const makeAnnotations = d3.annotation().annotations(annotations);
+    svg.append("g")
+        .attr("class", "annotation-group")
+        .call(makeAnnotations);
   } else if (currentScene === 2) {
     // complication scene/nuance
 
