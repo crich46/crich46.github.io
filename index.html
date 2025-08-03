@@ -10,11 +10,23 @@
         svg { background-color: #f4f4f4; }
         .controls { margin: 20px; }
         button { padding: 10px 15px; font-size: 16px; }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            padding: 8px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0;
+        }
     </style>
 </head>
 <body>
     <h1>What Makes a Monster Tough?</h1>
-    
+    <div class="tooltip"></div>
     <svg id="visualization" width="800" height="600"></svg>
 
     <div class="controls">

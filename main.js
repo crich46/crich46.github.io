@@ -5,6 +5,8 @@ const margin = { top: 20, right: 30, bottom: 40, left: 50 };
 const width = 800 - margin.left - margin.right;
 const height = 600 - margin.top - margin.bottom;
 
+const tooltip = d3.select(".tooltip");
+
 const svg = d3
   .select("#visualization")
   .attr("width", width + margin.left + margin.right)
@@ -62,6 +64,19 @@ function drawScene() {
             .attr("r", 4)
             .style("fill", "#800080") // i like purple
             .style("opacity", 0.7)
+            .on("mouseover", (event, d) => {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 0.9);
+                tooltip.html(`<strong>${d.name}</strong><br/>CR: ${d.cr}<br/>HP: ${d.hp_value}`)
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", () => {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
   } else if (currentScene === 2) {
     // complication scene/nuance
   } else if (currentScene === 3) {
