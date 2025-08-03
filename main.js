@@ -107,7 +107,11 @@ function drawScene() {
     // complication scene/nuance
     const xScale = d3
       .scaleLog()
-      .domain([0.1, d3.max(data, (d) => d.cr_value)])
+      .domain([
+        d3.min(data, (d) => d.cr_value) || 1,
+        d3.max(data, (d) => d.cr_value),
+      ])
+
       .range([0, width]);
     const yScale = d3
       .scaleLog()
@@ -179,7 +183,11 @@ function drawScene() {
     //aha scene - constitution is main driver of the HP of monsters
     const xScale = d3
       .scaleLog()
-      .domain([0.1, d3.max(data, (d) => d.cr_value)])
+      .domain([
+        d3.min(data, (d) => d.cr_value) || 1,
+        d3.max(data, (d) => d.cr_value),
+      ])
+
       .range([0, width]);
     const yScale = d3
       .scaleLog()
@@ -207,9 +215,11 @@ function drawScene() {
       .text("Hit Points (HP)");
 
     //color scale for constitution
+
+    const [minCon, maxCon] = d3.extent(data, (d) => d.constitution);
     const constitutionColor = d3
       .scaleSequential()
-      .domain(d3.extent(data, (d) => d.constitution)) // min/max on con values
+      .domain([maxCon, minCon]) // min/max on con values
       .interpolator(d3.interpolatePlasma);
 
     svg
