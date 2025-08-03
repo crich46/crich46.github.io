@@ -266,12 +266,11 @@ d3.csv("https://crich46.github.io/aidedd_blocks2.csv")
       d.ac_value = +d.ac;
 
       // ability scores
-      d.strength = +d.strength;
-      d.dexterity = +d.dexterity;
-      d.constitution = +d.constitution;
-      d.intelligence = +d.intelligence;
-      d.wisdom = +d.wisdom;
-      d.charisma = +d.charisma;
+      d.strength = +d.str;
+      d.constitution = +d.con;
+      d.intelligence = +d.int;
+      d.wisdom = +d.wis;
+      d.charisma = +d.cha;
     });
     data = loadedData;
     //checking data
