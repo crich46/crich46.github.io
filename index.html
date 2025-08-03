@@ -1,1 +1,31 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Narrative Visualization</title>
+    <style>
+        /* Basic styling */
+        body { font-family: sans-serif; text-align: center; }
+        svg { background-color: #f4f4f4; }
+        .controls { margin: 20px; }
+        button { padding: 10px 15px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>What Makes a Monster Tough?</h1>
+    
+    <svg id="visualization" width="800" height="600"></svg>
+
+    <div class="controls">
+        <button id="prev-button">Previous Scene</button>
+        <button id="next-button">Next Scene</button>
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
+
+    <script src="main.js"></script>
+
+</body>
+</html>
