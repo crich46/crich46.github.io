@@ -176,7 +176,83 @@ function drawScene() {
     const makeAnnotations = d3.annotation().annotations(annotations);
     svg.append("g").attr("class", "annotation-group").call(makeAnnotations);
   } else if (currentScene === 3) {
-    //aha scene
+    //aha scene - constitution is main driver of the HP of monsters
+    const xScale = d3
+      .scaleLog()
+      .domain([0.1, d3.max(data, (d) => d.cr_value)])
+      .range([0, width]);
+    const yScale = d3
+      .scaleLog()
+      .domain([1, d3.max(data, (d) => d.hp_value)])
+      .range([height, 0]);
+
+    svg
+      .append("g")
+      .attr("transform", `translate(0, ${height})`)
+      .call(d3.axisBottom(xScale).ticks(10, ".2s"));
+    svg.append("g").call(d3.axisLeft(yScale).ticks(10, ".2s"));
+
+    svg
+      .append("text")
+      .attr("text-anchor", "end")
+      .attr("x", width / 2 + margin.left)
+      .attr("y", height + margin.top + 10)
+      .text("Challenge Rating (CR)");
+    svg
+      .append("text")
+      .attr("text-anchor", "end")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -margin.left + 20)
+      .attr("x", -height / 2)
+      .text("Hit Points (HP)");
+
+    //color scale for constitution
+    const constitutionColor = d3
+      .scaleSequential()
+      .domain(d3.extent(data, (d) => d.constitution)) // min/max on con values
+      .interpolator(d3.interpolatePlasma);
+
+    svg
+      .selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", (d) => xScale(d.cr_value))
+      .attr("cy", (d) => yScale(d.hp_value))
+      .attr("r", 4)
+      .style("fill", (d) => constitutionColor(d.constitution)) // color by constitution
+      .style("opacity", 0.8)
+      .on("mouseover", (event, d) => {
+        tooltip.transition().duration(200).style("opacity", 0.9);
+        tooltip
+          .html(
+            tooltip.html(
+              `<strong>${d.name}</strong><br/>CR: ${d.cr}<br/>HP: ${d.hp_value}<br/>AC: ${d.ac_value}<br/>CON: ${d.constitution}`
+            )
+          )
+          .style("left", event.pageX + 5 + "px")
+          .style("top", event.pageY - 28 + "px");
+      })
+      .on("mouseout", () => {
+        tooltip.transition().duration(500).style("opacity", 0);
+      });
+
+    const type = d3.annotationLabel;
+    const annotations = [{
+        note: {
+            label: "A monster's Constitution (CON) is a key factor in its HP. Darker points indicate higher Constitution. Hover over any point to explore.",
+            title: "Constitution is Key",
+            align: "middle",
+            wrap: 220,
+        },
+        x: width / 2,
+        y: 400,
+        dy: 0,
+        dx: 0
+    }];
+
+    const makeAnnotations = d3.annotation().annotations(annotations);
+    svg.append("g").attr("class", "annotation-group").call(makeAnnotations);
   }
 }
 
