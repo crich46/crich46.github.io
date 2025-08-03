@@ -83,11 +83,12 @@ function drawScene() {
         note: {
             label: "As a monster's Challenge Rating (CR) increases, its Hit Points (HP) generally increases as well",
             title: "Baseline Trend",
+            align: "middle",
             wrap: 180
         },
         x: width / 2,
-        y: 100,
-        dy: -50,
+        y: 150,
+        dy: 0,
         dx: 0
     }];
     const makeAnnotations = d3.annotation().annotations(annotations);
