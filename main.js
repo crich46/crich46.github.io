@@ -87,7 +87,7 @@ function drawScene() {
             wrap: 180
         },
         x: width / 2,
-        y: 225,
+        y: 400,
         dy: 0,
         dx: 0
     }];
