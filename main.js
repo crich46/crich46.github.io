@@ -85,10 +85,10 @@ function drawScene() {
             title: "Baseline Trend",
             wrap: 180
         },
-        x: xScale(1),
-        y: yScale(500),
-        dy: -100,
-        dx: 10
+        x: width / 2,
+        y: 100,
+        dy: -50,
+        dx: 0
     }];
     const makeAnnotations = d3.annotation().annotations(annotations);
     svg.append("g")
