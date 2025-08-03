@@ -21,6 +21,47 @@ function drawScene() {
 
   if (currentScene === 1) {
     //big picture scene
+    //log scale because hp and cr covert a very big range 
+    const xScale = d3.scaleLog()
+        .domain([d3.min(data, d => d.cr_value) || 1, d3.max(data, d => d.cr_value)])
+        .range([0, width]);
+    const yScale = d3.scaleLog()
+        .domain([d3.min(data, d => d.hp_value) || 1, d3.max(data, d => d.hp_value)])
+        .range([height, 0]);
+    
+        const xAxis = d3.axisBottom(xScale).ticks(10, ".2s");
+    const yAxis = d3.axisLeft(yScale).ticks(10, ".2s");
+
+    svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(xAxis);
+
+    svg.append("g")
+        .call(yAxis);
+
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", width/2 + margin.left)
+        .attr("y", height + margin.top + 10)
+        .text("Challenge Rating (CR)");
+
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left + 20)
+        .attr("x", -height / 2)
+        .text("Hit Points (HP)");
+
+    //circles
+    svg.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+            .attr("cx", d => xScale(d.cr_value))
+            .attr("cy", d => yScale(d.hp_value))
+            .attr("r", 4)
+            .style("fill", "#800080") // i like purple
+            .style("opacity", 0.7)
   } else if (currentScene === 2) {
     // complication scene/nuance
   } else if (currentScene === 3) {
