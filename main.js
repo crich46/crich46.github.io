@@ -226,11 +226,9 @@ function drawScene() {
         tooltip.transition().duration(200).style("opacity", 0.9);
         tooltip
           .html(
-            tooltip.html(
-              `<strong>${d.name}</strong><br/>CR: ${d.cr}<br/>HP: ${d.hp_value}<br/>AC: ${d.ac_value}<br/>CON: ${d.constitution}`
-            )
-          )
-          .style("left", event.pageX + 5 + "px")
+            `<strong>${d.name}</strong><br/>CR: ${d.cr}<br/>HP: ${d.hp_value}<br/>AC: ${d.ac_value}<br/>CON: ${d.constitution}`
+          ) // Just one .html() call
+          .style("left", event.pageX + 10 + "px")
           .style("top", event.pageY - 28 + "px");
       })
       .on("mouseout", () => {
@@ -238,18 +236,21 @@ function drawScene() {
       });
 
     const type = d3.annotationLabel;
-    const annotations = [{
+    const annotations = [
+      {
         note: {
-            label: "A monster's Constitution (CON) is a key factor in its HP. Darker points indicate higher Constitution. Hover over any point to explore.",
-            title: "Constitution is Key",
-            align: "middle",
-            wrap: 220,
+          label:
+            "A monster's Constitution (CON) is a key factor in its HP. Darker points indicate higher Constitution. Hover over any point to explore.",
+          title: "Constitution is Key",
+          align: "middle",
+          wrap: 220,
         },
         x: width / 2,
         y: 400,
         dy: 0,
-        dx: 0
-    }];
+        dx: 0,
+      },
+    ];
 
     const makeAnnotations = d3.annotation().annotations(annotations);
     svg.append("g").attr("class", "annotation-group").call(makeAnnotations);
