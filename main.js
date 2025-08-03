@@ -23,81 +23,158 @@ function drawScene() {
 
   if (currentScene === 1) {
     //big picture scene
-    //log scale because hp and cr covert a very big range 
-    const xScale = d3.scaleLog()
-        .domain([d3.min(data, d => d.cr_value) || 1, d3.max(data, d => d.cr_value)])
-        .range([0, width]);
-    const yScale = d3.scaleLog()
-        .domain([d3.min(data, d => d.hp_value) || 1, d3.max(data, d => d.hp_value)])
-        .range([height, 0]);
-    
-        const xAxis = d3.axisBottom(xScale).ticks(10, ".2s");
+    //log scale because hp and cr covert a very big range
+    const xScale = d3
+      .scaleLog()
+      .domain([
+        d3.min(data, (d) => d.cr_value) || 1,
+        d3.max(data, (d) => d.cr_value),
+      ])
+      .range([0, width]);
+    const yScale = d3
+      .scaleLog()
+      .domain([
+        d3.min(data, (d) => d.hp_value) || 1,
+        d3.max(data, (d) => d.hp_value),
+      ])
+      .range([height, 0]);
+
+    const xAxis = d3.axisBottom(xScale).ticks(10, ".2s");
     const yAxis = d3.axisLeft(yScale).ticks(10, ".2s");
 
-    svg.append("g")
-        .attr("transform", `translate(0, ${height})`)
-        .call(xAxis);
+    svg.append("g").attr("transform", `translate(0, ${height})`).call(xAxis);
 
-    svg.append("g")
-        .call(yAxis);
+    svg.append("g").call(yAxis);
 
-    svg.append("text")
-        .attr("text-anchor", "end")
-        .attr("x", width/2 + margin.left)
-        .attr("y", height + margin.top + 10)
-        .text("Challenge Rating (CR)");
+    svg
+      .append("text")
+      .attr("text-anchor", "end")
+      .attr("x", width / 2 + margin.left)
+      .attr("y", height + margin.top + 10)
+      .text("Challenge Rating (CR)");
 
-    svg.append("text")
-        .attr("text-anchor", "end")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -margin.left + 20)
-        .attr("x", -height / 2)
-        .text("Hit Points (HP)");
+    svg
+      .append("text")
+      .attr("text-anchor", "end")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -margin.left + 20)
+      .attr("x", -height / 2)
+      .text("Hit Points (HP)");
 
     //circles
-    svg.selectAll("circle")
-        .data(data)
-        .enter()
-        .append("circle")
-            .attr("cx", d => xScale(d.cr_value))
-            .attr("cy", d => yScale(d.hp_value))
-            .attr("r", 4)
-            .style("fill", "#800080") // i like purple
-            .style("opacity", 0.7)
-            .on("mouseover", (event, d) => {
-                tooltip.transition()
-                    .duration(200)
-                    .style("opacity", 0.9);
-                tooltip.html(`<strong>${d.name}</strong><br/>CR: ${d.cr}<br/>HP: ${d.hp_value}`)
-                    .style("left", (event.pageX + 5) + "px")
-                    .style("top", (event.pageY - 28) + "px");
-            })
-            .on("mouseout", () => {
-                tooltip.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            });
+    svg
+      .selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", (d) => xScale(d.cr_value))
+      .attr("cy", (d) => yScale(d.hp_value))
+      .attr("r", 4)
+      .style("fill", "#800080") // i like purple
+      .style("opacity", 0.7)
+      .on("mouseover", (event, d) => {
+        tooltip.transition().duration(200).style("opacity", 0.9);
+        tooltip
+          .html(
+            `<strong>${d.name}</strong><br/>CR: ${d.cr}<br/>HP: ${d.hp_value}`
+          )
+          .style("left", event.pageX + 5 + "px")
+          .style("top", event.pageY - 28 + "px");
+      })
+      .on("mouseout", () => {
+        tooltip.transition().duration(500).style("opacity", 0);
+      });
     const type = d3.annotationLabel;
 
-    const annotations = [{
+    const annotations = [
+      {
         note: {
-            label: "As a monster's Challenge Rating (CR) increases, its Hit Points (HP) generally increases as well",
-            title: "Baseline Trend",
-            align: "middle",
-            wrap: 180
+          label:
+            "As a monster's Challenge Rating (CR) increases, its Hit Points (HP) generally increases as well",
+          title: "Baseline Trend",
+          align: "middle",
+          wrap: 180,
+        },
+        x: width / 2,
+        y: 400, // THIS TOOK FOREVER TO FIGURE OUT
+        dy: 0,
+        dx: 0,
+      },
+    ];
+    const makeAnnotations = d3.annotation().annotations(annotations);
+    svg.append("g").attr("class", "annotation-group").call(makeAnnotations);
+  } else if (currentScene === 2) {
+    // complication scene/nuance
+    const xScale = d3
+      .scaleLog()
+      .domain([0.1, d3.max(data, (d) => d.cr_value)])
+      .range([0, width]);
+    const yScale = d3
+      .scaleLog()
+      .domain([1, d3.max(data, (d) => d.hp_value)])
+      .range([height, 0]);
+
+    svg
+      .append("g")
+      .attr("transform", `translate(0, ${height})`)
+      .call(d3.axisBottom(xScale).ticks(10, ".2s"));
+    svg.append("g").call(d3.axisLeft(yScale).ticks(10, ".2s"));
+
+    svg
+      .append("text")
+      .attr("text-anchor", "end")
+      .attr("x", width / 2 + margin.left)
+      .attr("y", height + margin.top + 10)
+      .text("Challenge Rating (CR)");
+    svg
+      .append("text")
+      .attr("text-anchor", "end")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -margin.left + 20)
+      .attr("x", -height / 2)
+      .text("Hit Points (HP)");
+
+    //circle drawing
+    svg
+      .selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", (d) => xScale(d.cr_value))
+      .attr("cy", (d) => yScale(d.hp_value))
+      .attr("r", 4)
+      .style("fill", (d) => (d.ac_value > 17 ? "orange" : "#800080")) // orange for high AC
+      .style("opacity", (d) => (d.ac_value > 17 ? 0.9 : 0.4))
+      .on("mouseover", (event, d) => {
+        tooltip.transition().duration(200).style("opacity", 0.9);
+        tooltip
+          .html(
+            `<strong>${d.name}</strong><br/>CR: ${d.cr}<br/>HP: ${d.hp_value}<br/>AC: ${d.ac_value}`
+          )
+          .style("left", event.pageX + 5 + "px")
+          .style("top", event.pageY - 28 + "px");
+      })
+      .on("mouseout", () => {
+        tooltip.transition().duration(500).style("opacity", 0);
+      });
+    const type = d3.annotationLabel;
+    const annotations = [
+      {
+        note: {
+          label:
+            "These monsters are not tough just because of a high HP, but because they are hard to hit with, with a very high AC",
+          title: "High AC (Armor Class) Monsters (AC > 17)",
+          align: "middle",
+          wrap: 180,
         },
         x: width / 2,
         y: 400,
         dy: 0,
-        dx: 0
-    }];
+        dx: 0,
+      },
+    ];
     const makeAnnotations = d3.annotation().annotations(annotations);
-    svg.append("g")
-        .attr("class", "annotation-group")
-        .call(makeAnnotations);
-  } else if (currentScene === 2) {
-    // complication scene/nuance
-
+    svg.append("g").attr("class", "annotation-group").call(makeAnnotations);
   } else if (currentScene === 3) {
     //aha scene
   }
