@@ -21,7 +21,6 @@ function drawScene() {
 
   if (currentScene === 1) {
     //big picture scene
-
   } else if (currentScene === 2) {
     // complication scene/nuance
   } else if (currentScene === 3) {
@@ -54,21 +53,19 @@ d3.csv("https://crich46.github.io/aidedd_blocks2.csv")
     console.error("Error loading data:", error);
   });
 
-  //triggers
-  d3.select("#next-button").on("click", () => {
-    currentScene++;
-    if (currentScene > 3) {
-      currentScene = 1; // Loop back to the first scene
-    }
-    drawScene();
-  });
+//triggers
+d3.select("#next-button").on("click", () => {
+  currentScene++;
+  if (currentScene > 3) {
+    currentScene = 1; // Loop back to the first scene
+  }
+  drawScene();
+});
 
 d3.select("#prev-button").on("click", () => {
-    currentScene--;
-    if (currentScene < 1) {
-      currentScene = 3; // Loop back to the last scene
-    }
-    drawScene();
-  });
-
-  
+  currentScene--;
+  if (currentScene < 1) {
+    currentScene = 3; // Loop back to the last scene
+  }
+  drawScene();
+});
