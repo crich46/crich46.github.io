@@ -29,9 +29,9 @@ function drawScene() {
   }
 }
 
-d3.csv("crich46.github.io/aidedd_blocks2.csv")
-  .then((data) => {
-    data.forEach((d) => {
+d3.csv("https://crich46.github.io/aidedd_blocks2.csv")
+  .then((loadedData) => {
+    loadedData.forEach((d) => {
       // Challenge Rating, AC, and HP
       d.cr_value = +d.cr;
       d.hp_value = +d.hp;
@@ -45,12 +45,10 @@ d3.csv("crich46.github.io/aidedd_blocks2.csv")
       d.wisdom = +d.wisdom;
       d.charisma = +d.charisma;
     });
-
-    //checking data type
-    console.log(
-      "data loaded. First monster CR is now a: " + typeof data[0].cr_value
-    );
+    data = loadedData;
+    //checking data
     console.log(data[0]);
+    drawScene(); // Initial draw
   })
   .catch((error) => {
     console.error("Error loading data:", error);
